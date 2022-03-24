@@ -40,11 +40,24 @@
         <el-button size="small" type="info" plain>下架</el-button>
       </el-table-column>
     </el-table>
+    <el-pagination
+      v-model:currentPage="currentPage4"
+      v-model:page-size="pageSize4"
+      :page-sizes="[100, 200, 300, 400]"
+      :small="true"
+      :disabled="disabled"
+      background
+      layout="->, sizes, prev, pager, next, total"
+      :total="400"
+      style="margin-top: 10px;"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
   </el-card>
 </template>
 
 <script setup lang="ts">
-
+import {ref} from 'vue';
 interface User {
   id: string;
   type: string;
@@ -55,6 +68,18 @@ interface User {
 const filterTag = (value: string, row: User) => {
   return row.putaway === value;
 };
+
+
+const currentPage4 = ref(4)
+const pageSize4 = ref(100)
+const disabled = ref(false)
+
+const handleSizeChange = (val: number) => {
+  console.log(`${val} items per page`)
+}
+const handleCurrentChange = (val: number) => {
+  console.log(`current page: ${val}`)
+}
 
 const tableData: User[] = [
   {
@@ -88,4 +113,5 @@ const tableData: User[] = [
 .el-card {
   height: 99%;
 }
+
 </style>
