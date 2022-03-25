@@ -91,10 +91,46 @@ router.get('/delExcerpt', async (ctx, next) => {
 
 
 // 图片后台管理的接口----------------------------------------------------------------
-// const findPicSql = "select "
+const findPicTotalSql = "select * from picture"
+const findPicSql = "select * from picture order by id desc limit ?,?"
 
+// 查
+router.get('/findPicTotal', async (ctx, next) => {
+  ctx.body = await DB.query(findPicTotalSql)
+})
+
+// 分页查询
+router.get('/picQuery', async (ctx, next) => {
+  const {limit, page} = ctx.request.query
+  /* 
+    第一页：0，10（0，10）
+    第二页：10，20（10，10）
+  */
+  // limit后面都是数字类型，转换一下 
+  const pageFindSqlParams = [limit * (page - 1), +limit]
+  // console.log(pageFindSqlParams);
+  let total = await DB.query(findPicTotalSql)
+  let list = await DB.query(findPicSql, pageFindSqlParams)
+  // 解决不换行：replace全局替换和v-html
+  // list.forEach(e => {
+  //   e.content = e.content.replace(/\n/g, "<br/>")
+  // })
+  ctx.body = {total: total.length, list}
+  // console.log(ctx.body);
+})
+
+// 上架下架
+const updatePicSql = "update picture set putaway = ? where id = ?"
+router.get('/updatePic', async (ctx, next) => {
+  const { id, putaway } = ctx.request.query
+  const updatePicSqlParams = [putaway, id]
+  await DB.query(updatePicSql, updatePicSqlParams)
+  ctx.body = {
+    code: 200
+  }
+})
 
 
 server.listen(3450)
 // console.log(`服务器地址:${process.env.VUE_APP_BASE_API}/findExcerpt`);
-console.log('服务器地址:http://localhost:3450/findExcerpt');
+console.log('服务器地址:http://localhost:3450/picQuery');

@@ -68,7 +68,6 @@ function changeMenu(item: { name: string }) {
 }
 
 .el-menu {
-  height: 100%;
   border-right: none;
   .aside_title {
     font-size: 24px;

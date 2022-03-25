@@ -4,13 +4,18 @@
   </div>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <style lang="less">
-html,body{
+.baseCon {
   width: 100%;
   height: 100%;
 }
+#app {
+  .baseCon();
+}
+.app {
+  .baseCon();
+}
+
 </style>
